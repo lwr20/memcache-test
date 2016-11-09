@@ -14,6 +14,8 @@ CLIENT_INSTANCE_TYPE:=n1-standard-1
 NODE_NUMBERS := $(shell seq -f '%02.0f' 1 $(NUM_CLIENTS))
 NODE_NAMES := $(addprefix $(PREFIX)-,$(NODE_NUMBERS))
 
+-include local-settings.mk
+
 gce-create:
 	$(MAKE) --no-print-directory deploy-server
 	$(MAKE) --no-print-directory deploy-clients
@@ -35,7 +37,7 @@ deploy-server: server-install.sh
 	  --machine-type $(SERVER_INSTANCE_TYPE) \
 	  --local-ssd interface=scsi \
 	  --metadata-from-file startup-script=server-install.sh & \
-	  echo "Waiting for creation of server node to finish..."; \
+	  echo "Waiting for creation of server node to finish..." && \
 	  wait && \
 	  echo "server node started."
 
@@ -46,10 +48,10 @@ deploy-clients: client-config.yaml
 	  --image-project coreos-cloud \
 	  --image $(CLIENT_IMAGE_NAME) \
 	  --machine-type $(CLIENT_INSTANCE_TYPE) \
-	  --metadata-from-file user-data=client-config.yaml \
-	  echo "Waiting for creation of this batch of worker nodes to finish..."; \
+	  --metadata-from-file user-data=client-config.yaml; \
+	  echo "Waiting for creation of worker nodes to finish..." && \
 		wait && \
-		echo "Batch of nodes created. Waiting 120s for cluster to settle down...";'
+		echo "Worker nodes created.";'
 
 gce-cleanup:
 	gcloud compute instances list --zones $(GCE_REGION) -r '$(PREFIX).*' | \

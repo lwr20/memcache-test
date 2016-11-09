@@ -53,4 +53,3 @@ initctl start calico-felix
 
 # Set the felix Ready flag
 curl http://127.0.0.1:2379/v2/keys/calico/v1/Ready -XPUT -d value="true"
-

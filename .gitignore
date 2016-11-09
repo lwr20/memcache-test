@@ -1,3 +1,4 @@
 client-config.yaml
 server-install.sh
 .idea/
+local-settings.mk
