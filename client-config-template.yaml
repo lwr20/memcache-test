@@ -1,0 +1,13 @@
+#cloud-config
+---
+coreos:
+  etcd2:
+    proxy: on
+    listen-client-urls: http://127.0.0.1:2379
+    initial-cluster: etcd-01=http://__PREFIX__-server:2380
+  update:
+    reboot-strategy: off
+  units:
+    - name: "docker.service"
+    - name: etcd2.service
+      command: start
