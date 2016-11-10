@@ -5,11 +5,11 @@ GCE_REGION:=us-central1-f
 GCE_PROJECT:=unique-caldron-775
 SERVER_IMAGE_NAME:=centos-6-v20161027
 CLIENT_IMAGE_NAME:=coreos-stable-1185-3-0-v20161101
-NUM_CLIENTS:=2
+NUM_CLIENTS:=1
 PYINSTALLER_URL:=https://github.com/projectcalico/felix/releases/download/2.0.0-beta.3/calico-felix-2.0.0b3-git-4a1fa71.tgz
 PREFIX:=memcache-test
-SERVER_INSTANCE_TYPE:=n1-standard-1
-CLIENT_INSTANCE_TYPE:=n1-standard-1
+SERVER_INSTANCE_TYPE:=n1-highcpu-8  # memcached seems to use up to 4 CPUs.
+CLIENT_INSTANCE_TYPE:=n1-highcpu-16
 
 NODE_NUMBERS := $(shell seq -f '%02.0f' 1 $(NUM_CLIENTS))
 NODE_NAMES := $(addprefix $(PREFIX)-,$(NODE_NUMBERS))
