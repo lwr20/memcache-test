@@ -15,3 +15,14 @@ These instructions have been tested on Ubuntu 16.04.  They are likely to work wi
 * Run
     * `make gce-create`, this runs several gcloud commands to start the server and test nodes
     * To tear down the cluster, run `make gce-cleanup`.
+
+## Running tests
+
+Once you've got a rig set up, ssh into the server and run:
+`echo stats reset | nc 127.0.0.1 11211 && watch "echo stats | nc 127.0.0.1 11211"`
+This will reset the stats, then display and update them every 2s.
+
+Now ssh into the test node(s) and run:
+`docker run --rm eigrad/tcpkali memcache-test-server:11211 -em "get greeting\r\n" --first-message "set greeting 1 0 5\r\nHello\r\n" -c 100 --connect-rate 10k --connect-timeout 100ms --channel-lifetime 11ms -T 10`
+
+This runs about 6800 connections/sec on an n1-highcpu-16.
